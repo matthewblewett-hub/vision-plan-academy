@@ -1,6 +1,8 @@
-import React, { useState } from 'react';
+import React, { useState, useMemo } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { ChevronRight, ChevronLeft, Target, Sparkles, Compass, Mail, User } from 'lucide-react';
+import LanguageSelector from './components/LanguageSelector';
+import { translations, Language } from './translations';
 
 // --- Data Types ---
 interface Question {
@@ -20,249 +22,251 @@ interface Section {
   isFinal?: boolean;
 }
 
-// --- App Content ---
-const SECTIONS: Section[] = [
-  {
-    id: 'welcome',
-    title: 'Welcome',
-    isIntro: true,
-    questions: [
-      { id: 'first_name', type: 'text', label: 'First Name', placeholder: 'Enter your first name' },
-      { id: 'last_name', type: 'text', label: 'Last Name', placeholder: 'Enter your last name' },
-      { id: 'email', type: 'email', label: 'Email Address', placeholder: 'Where should we send your plan?' }
-    ]
-  },
-  {
-    id: 'chapter1_1',
-    chapter: 'Chapter 1: The Mirror',
-    title: '1.1 What’s One Thing You’d Like to Improve?',
-    questions: [
-      {
-        id: 'improve_one',
-        type: 'textarea',
-        label: "If you could get better at just one thing this year, what would it be? It could be a school subject, a personal skill, a habit, or even how you handle challenges.",
-        description: "📝 Write a few sentences explaining what it is and why it matters to you.",
-        placeholder: "Your answer here..."
-      }
-    ]
-  },
-  {
-    id: 'chapter1_2',
-    chapter: 'Chapter 1: The Mirror',
-    title: '1.2. Things to Learn About',
-    questions: [
-      {
-        id: 'learn_desc',
-        type: 'textarea',
-        label: "What’s something you’re curious about or would like to get better at — in the next 6 months, 2 years, and 5 years? Think about school, life skills, passions, or future careers.",
-        description: "📝 Write 1–2 sentences for each time frame: short-term (6 months), medium-term (2 years), and long-term (5 years).",
-        placeholder: "6 months: \n2 years: \n5 years: "
-      }
-    ]
-  },
-  {
-    id: 'chapter1_3',
-    chapter: 'Chapter 1: The Mirror',
-    title: '1.3 Improve Your Habits',
-    questions: [
-      {
-        id: 'habits_to_change',
-        type: 'textarea',
-        label: "What Habits Could You Improve? Are there any habits you’d like to get better at — or stop — in these areas:\n• 📘 School (e.g. procrastination, focus, studying)\n• 👥 Friends & family (e.g. communication, respect, time together)\n• 🧠 Health & well-being (e.g. sleep, exercise, eating)\n• 🚫 Temptations (e.g. phone use, smoking, alcohol, substances)",
-        description: "📝 Write down a few habits you want to build or change — and why.",
-        placeholder: "Your answer here..."
-      }
-    ]
-  },
-  {
-    id: 'chapter2_4',
-    chapter: 'Chapter 2: The Horizon',
-    title: '1.4. Your Social Life in the Future',
-    questions: [
-      {
-        id: 'social_life',
-        type: 'textarea',
-        label: "What Kind of Friends and Social Life Do You Want? Think about the kind of people you want to spend time with — friends, mentors, teammates, classmates. What kind of friendships or social life would help you grow and feel supported?",
-        description: "📝 Write a few sentences describing your ideal group of friends and social environment. Think about the kind of people who bring out your best.",
-        placeholder: "Your answer here..."
-      }
-    ]
-  },
-  {
-    id: 'chapter2_5',
-    chapter: 'Chapter 2: The Horizon',
-    title: '1.5. Your Leisure Activity in the Future',
-    questions: [
-      {
-        id: 'leisure_time',
-        type: 'textarea',
-        label: "What Will You Do With Your Free Time? Outside of school and responsibilities, how do you want to spend your free time in a way that’s fun and meaningful? Instead of wasting time, what hobbies, creative projects, or positive habits would like to build into your life?",
-        description: "📝 Write a few sentences about how you’d like to use your free time — to grow, relax, or do something you enjoy and feel proud of.",
-        placeholder: "Your answer here..."
-      }
-    ]
-  },
-  {
-    id: 'chapter2_6',
-    chapter: 'Chapter 2: The Horizon',
-    title: '1.6. Your Family Life in the Future',
-    questions: [
-      {
-        id: 'family_life',
-        type: 'textarea',
-        label: "What Kind of Family Life Do You Want? Think about your family now — and the kind of family or home you want in the future. What kind of relationships would make you feel supported and connected? How could you improve things with your parents or siblings? What kind of partner would be good for you one day?",
-        description: "📝 Write a few sentences about your ideal family life — both now and in the future.",
-        placeholder: "Your answer here..."
-      }
-    ]
-  },
-  {
-    id: 'chapter2_7',
-    chapter: 'Chapter 2: The Horizon',
-    title: '1.7. Your Career in the Future',
-    questions: [
-      {
-        id: 'career_desc',
-        type: 'textarea',
-        label: "What Career or Future Work Would You Enjoy? Think about your school and future career path. Where would you like to be in the next:\n• 🗓️ 6 months (e.g. school progress, internships, part-time work)\n• 🗓️ 2 years (e.g. what you’re studying or learning)\n• 🗓️ 5 years (e.g. what kind job or work you’d like to do)",
-        description: "📝 Write 1–2 sentences for each time frame. What are you aiming for — and why does it matter to you?",
-        placeholder: "Your answer here..."
-      }
-    ]
-  },
-  {
-    id: 'chapter3_8',
-    chapter: 'Chapter 3: The Mentors',
-    title: '1.8. Qualities You Admire',
-    questions: [
-      {
-        id: 'mentors_admire',
-        type: 'textarea',
-        label: "Who are the people you admire and why? Think of people you know personally, or famous people, or even fictional characters. What qualities do they have that you would like to develop in yourself?",
-        description: "📝 Write a few sentences describing the people you look up to and the specific qualities they have that you admire.",
-        placeholder: "Who do you admire and why?"
-      }
-    ]
-  },
-  {
-    id: 'chapter4_9',
-    chapter: 'Chapter 4: Future Vision',
-    title: '2.1 The Big Picture',
-    questions: [
-      {
-        id: 'big_goal_title',
-        type: 'text',
-        label: "Big Goal Title",
-        description: "Give your overall future vision a clear, inspiring title.",
-        placeholder: "e.g. My Path to Becoming an Engineer"
-      },
-      {
-        id: 'big_goal_desc',
-        type: 'textarea',
-        label: "Big Goal Description",
-        description: "Describe your overall vision for your life in 3–5 years. What is the main outcome you are working towards?",
-        placeholder: "Describe your big picture vision..."
-      }
-    ]
-  },
-  {
-    id: 'chapter4_10',
-    chapter: 'Chapter 4: Future Vision',
-    title: '2.2 Break Into 6 Goals',
-    questions: [
-      { 
-        id: 'goal_instructions_header', 
-        type: 'textarea', 
-        label: "Try to think of 6 important goals you want to work toward. These can be about:\n\n• 📘 School (e.g. “Get accepted into university”)\n• 💼 Career (e.g. “Start my own business one day”)\n• 💪 Health (e.g. “Eat better and get fit”)\n• 👥 Friends or family (e.g. “Improve my relationship with my parents”)\n• 🎨 Personal growth (e.g. “Read more books” or “Build confidence”)\n\nYou can also look back at your answers from the earlier questions to help.",
-        description: "📝 Give the Goal a Title and then Write 1 short sentence for each goal. Keep it simple and focused.",
-        placeholder: "Self-reflection area (optional)..."
-      },
-      { id: 'goal1_title', type: 'text', label: "Goal 1: Title", placeholder: "Goal Title" },
-      { id: 'goal1_desc', type: 'text', label: "Goal 1: Description (1 short sentence)", placeholder: "Short description..." },
-      { id: 'goal2_title', type: 'text', label: "Goal 2: Title", placeholder: "Goal Title" },
-      { id: 'goal2_desc', type: 'text', label: "Goal 2: Description (1 short sentence)", placeholder: "Short description..." },
-      { id: 'goal3_title', type: 'text', label: "Goal 3: Title", placeholder: "Goal Title" },
-      { id: 'goal3_desc', type: 'text', label: "Goal 3: Description (1 short sentence)", placeholder: "Short description..." },
-      { id: 'goal4_title', type: 'text', label: "Goal 4: Title", placeholder: "Goal Title" },
-      { id: 'goal4_desc', type: 'text', label: "Goal 4: Description (1 short sentence)", placeholder: "Short description..." },
-      { id: 'goal5_title', type: 'text', label: "Goal 5: Title", placeholder: "Goal Title" },
-      { id: 'goal5_desc', type: 'text', label: "Goal 5: Description (1 short sentence)", placeholder: "Short description..." },
-      { id: 'goal6_title', type: 'text', label: "Goal 6: Title", placeholder: "Goal Title" },
-      { id: 'goal6_desc', type: 'text', label: "Goal 6: Description (1 short sentence)", placeholder: "Short description..." }
-    ]
-  },
-  {
-    id: 'chapter4_priority',
-    chapter: 'Chapter 4: Future Vision',
-    title: '2.3 Prioritize Your Goals',
-    questions: [
-      {
-        id: 'goal_priority_order',
-        type: 'text',
-        label: "Now, put your goals in order of importance.",
-        description: "📝 Drag or click to arrange your 6 goals from most important (1) to least important (6). This helps you focus on what matters most first.",
-        placeholder: "Ordering..."
-      }
-    ]
-  }
-];
-
-const FINAL_SECTION: Section = {
-  id: 'final_future_steps',
-  chapter: 'Final Step: Future Steps',
-  title: 'Congratulations!',
-  isFinal: true,
-  questions: [
-    {
-      id: 'final_message',
-      type: 'textarea',
-      label: "You have completed your Personal Vision Plan.",
-      description: "The mere act of capturing this important information about your future already puts you at an advantage to achieve these things.",
-      placeholder: ""
-    }
-  ]
-};
-
 function App() {
+  const [language, setLanguage] = useState<Language>('en');
   const [currentSection, setCurrentSection] = useState(0);
   const [answers, setAnswers] = useState<Record<string, string>>({});
   const [goalOrder, setGoalOrder] = useState<number[]>([1, 2, 3, 4, 5, 6]);
+
+  const t = translations[language];
+
+  const SECTIONS: Section[] = useMemo(() => [
+    {
+      id: 'welcome',
+      title: t.welcome.title,
+      isIntro: true,
+      questions: [
+        { id: 'first_name', type: 'text', label: t.welcome.firstNameLabel, placeholder: t.welcome.firstNamePlaceholder },
+        { id: 'last_name', type: 'text', label: t.welcome.lastNameLabel, placeholder: t.welcome.lastNamePlaceholder },
+        { id: 'email', type: 'email', label: t.welcome.emailLabel, placeholder: t.welcome.emailPlaceholder }
+      ]
+    },
+    {
+      id: 'chapter1_1',
+      chapter: t.chapters.chapter1.name,
+      title: t.chapters.chapter1.s1_1.title,
+      questions: [
+        {
+          id: 'improve_one',
+          type: 'textarea',
+          label: t.chapters.chapter1.s1_1.question,
+          description: t.chapters.chapter1.s1_1.desc,
+          placeholder: t.chapters.chapter1.s1_1.placeholder
+        }
+      ]
+    },
+    {
+      id: 'chapter1_2',
+      chapter: t.chapters.chapter1.name,
+      title: t.chapters.chapter1.s1_2.title,
+      questions: [
+        {
+          id: 'learn_desc',
+          type: 'textarea',
+          label: t.chapters.chapter1.s1_2.question,
+          description: t.chapters.chapter1.s1_2.desc,
+          placeholder: t.chapters.chapter1.s1_2.placeholder
+        }
+      ]
+    },
+    {
+      id: 'chapter1_3',
+      chapter: t.chapters.chapter1.name,
+      title: t.chapters.chapter1.s1_3.title,
+      questions: [
+        {
+          id: 'habits_to_change',
+          type: 'textarea',
+          label: t.chapters.chapter1.s1_3.question,
+          description: t.chapters.chapter1.s1_3.desc,
+          placeholder: t.chapters.chapter1.s1_3.placeholder
+        }
+      ]
+    },
+    {
+      id: 'chapter2_4',
+      chapter: t.chapters.chapter2.name,
+      title: t.chapters.chapter2.s2_4.title,
+      questions: [
+        {
+          id: 'social_life',
+          type: 'textarea',
+          label: t.chapters.chapter2.s2_4.question,
+          description: t.chapters.chapter2.s2_4.desc,
+          placeholder: t.chapters.chapter2.s2_4.placeholder
+        }
+      ]
+    },
+    {
+      id: 'chapter2_5',
+      chapter: t.chapters.chapter2.name,
+      title: t.chapters.chapter2.s2_5.title,
+      questions: [
+        {
+          id: 'leisure_time',
+          type: 'textarea',
+          label: t.chapters.chapter2.s2_5.question,
+          description: t.chapters.chapter2.s2_5.desc,
+          placeholder: t.chapters.chapter2.s2_5.placeholder
+        }
+      ]
+    },
+    {
+      id: 'chapter2_6',
+      chapter: t.chapters.chapter2.name,
+      title: t.chapters.chapter2.s2_6.title,
+      questions: [
+        {
+          id: 'family_life',
+          type: 'textarea',
+          label: t.chapters.chapter2.s2_6.question,
+          description: t.chapters.chapter2.s2_6.desc,
+          placeholder: t.chapters.chapter2.s2_6.placeholder
+        }
+      ]
+    },
+    {
+      id: 'chapter2_7',
+      chapter: t.chapters.chapter2.name,
+      title: t.chapters.chapter2.s2_7.title,
+      questions: [
+        {
+          id: 'career_desc',
+          type: 'textarea',
+          label: t.chapters.chapter2.s2_7.question,
+          description: t.chapters.chapter2.s2_7.desc,
+          placeholder: t.chapters.chapter2.s2_7.placeholder
+        }
+      ]
+    },
+    {
+      id: 'chapter3_8',
+      chapter: t.chapters.chapter3.name,
+      title: t.chapters.chapter3.s3_8.title,
+      questions: [
+        {
+          id: 'mentors_admire',
+          type: 'textarea',
+          label: t.chapters.chapter3.s3_8.question,
+          description: t.chapters.chapter3.s3_8.desc,
+          placeholder: t.chapters.chapter3.s3_8.placeholder
+        }
+      ]
+    },
+    {
+      id: 'chapter4_9',
+      chapter: t.chapters.chapter4.name,
+      title: t.chapters.chapter4.s4_9.title,
+      questions: [
+        {
+          id: 'big_goal_title',
+          type: 'text',
+          label: t.chapters.chapter4.s4_9.goalTitle,
+          description: t.chapters.chapter4.s4_9.goalTitleDesc,
+          placeholder: t.chapters.chapter4.s4_9.placeholderTitle
+        },
+        {
+          id: 'big_goal_desc',
+          type: 'textarea',
+          label: t.chapters.chapter4.s4_9.goalDesc,
+          description: t.chapters.chapter4.s4_9.goalDescDesc,
+          placeholder: t.chapters.chapter4.s4_9.placeholderDesc
+        }
+      ]
+    },
+    {
+      id: 'chapter4_10',
+      chapter: t.chapters.chapter4.name,
+      title: t.chapters.chapter4.s4_10.title,
+      questions: [
+        { 
+          id: 'goal_instructions_header', 
+          type: 'textarea', 
+          label: t.chapters.chapter4.s4_10.question,
+          description: t.chapters.chapter4.s4_10.desc,
+          placeholder: t.chapters.chapter4.s4_10.placeholder
+        },
+        { id: 'goal1_title', type: 'text', label: t.chapters.chapter4.s4_10.goalTitleLabel.replace('{n}', '1'), placeholder: t.chapters.chapter4.s4_10.goalTitlePlaceholder },
+        { id: 'goal1_desc', type: 'text', label: t.chapters.chapter4.s4_10.goalDescLabel.replace('{n}', '1'), placeholder: t.chapters.chapter4.s4_10.goalDescPlaceholder },
+        { id: 'goal2_title', type: 'text', label: t.chapters.chapter4.s4_10.goalTitleLabel.replace('{n}', '2'), placeholder: t.chapters.chapter4.s4_10.goalTitlePlaceholder },
+        { id: 'goal2_desc', type: 'text', label: t.chapters.chapter4.s4_10.goalDescLabel.replace('{n}', '2'), placeholder: t.chapters.chapter4.s4_10.goalDescPlaceholder },
+        { id: 'goal3_title', type: 'text', label: t.chapters.chapter4.s4_10.goalTitleLabel.replace('{n}', '3'), placeholder: t.chapters.chapter4.s4_10.goalTitlePlaceholder },
+        { id: 'goal3_desc', type: 'text', label: t.chapters.chapter4.s4_10.goalDescLabel.replace('{n}', '3'), placeholder: t.chapters.chapter4.s4_10.goalDescPlaceholder },
+        { id: 'goal4_title', type: 'text', label: t.chapters.chapter4.s4_10.goalTitleLabel.replace('{n}', '4'), placeholder: t.chapters.chapter4.s4_10.goalTitlePlaceholder },
+        { id: 'goal4_desc', type: 'text', label: t.chapters.chapter4.s4_10.goalDescLabel.replace('{n}', '4'), placeholder: t.chapters.chapter4.s4_10.goalDescPlaceholder },
+        { id: 'goal5_title', type: 'text', label: t.chapters.chapter4.s4_10.goalTitleLabel.replace('{n}', '5'), placeholder: t.chapters.chapter4.s4_10.goalTitlePlaceholder },
+        { id: 'goal5_desc', type: 'text', label: t.chapters.chapter4.s4_10.goalDescLabel.replace('{n}', '5'), placeholder: t.chapters.chapter4.s4_10.goalDescPlaceholder },
+        { id: 'goal6_title', type: 'text', label: t.chapters.chapter4.s4_10.goalTitleLabel.replace('{n}', '6'), placeholder: t.chapters.chapter4.s4_10.goalTitlePlaceholder },
+        { id: 'goal6_desc', type: 'text', label: t.chapters.chapter4.s4_10.goalDescLabel.replace('{n}', '6'), placeholder: t.chapters.chapter4.s4_10.goalDescPlaceholder }
+      ]
+    },
+    {
+      id: 'chapter4_priority',
+      chapter: t.chapters.chapter4.name,
+      title: t.chapters.chapter4.s4_priority.title,
+      questions: [
+        {
+          id: 'goal_priority_order',
+          type: 'text',
+          label: t.chapters.chapter4.s4_priority.question,
+          description: t.chapters.chapter4.s4_priority.desc,
+          placeholder: t.chapters.chapter4.s4_priority.placeholder
+        }
+      ]
+    }
+  ], [t]);
+
+  const FINAL_SECTION: Section = useMemo(() => ({
+    id: 'final_future_steps',
+    chapter: t.final.chapter,
+    title: t.final.title,
+    isFinal: true,
+    questions: [
+      {
+        id: 'final_message',
+        type: 'textarea',
+        label: t.final.message,
+        description: t.final.desc,
+        placeholder: ""
+      }
+    ]
+  }), [t]);
 
   // Dynamic Deep-Dive Sections for each goal
   const deepDiveSections: Section[] = goalOrder.map((goalNum, index) => {
     const goalTitle = answers[`goal${goalNum}_title`] || `Goal ${goalNum}`;
     return {
       id: `chapter4_goal_${goalNum}`,
-      chapter: 'Chapter 4: Future Vision',
+      chapter: t.chapters.chapter4.name,
       title: `Goal ${index + 1} of 6: ${goalTitle}`,
       questions: [
         {
           id: `goal${goalNum}_why`,
           type: 'textarea',
-          label: `2.4.1 Why Do You Want This Goal: "${goalTitle}"?\nTake a moment to think about why this goal matters to you. Ask yourself:\n• Do I really care about this goal?\n• Am I doing it for myself, or to please others?\n• Would I feel disappointed if I gave up on it?\n• Does this goal excite or inspire me?\n• Is it part of a bigger dream for my life?`,
-          description: "📝 Write a few sentences explaining why this goal is important to you.",
-          placeholder: "Why it matters..."
+          label: t.chapters.chapter4.deepDive.whyLabel.replace('{goalTitle}', goalTitle),
+          description: t.chapters.chapter4.deepDive.whyDesc,
+          placeholder: t.chapters.chapter4.deepDive.whyPlaceholder
         },
         {
           id: `goal${goalNum}_steps`,
           type: 'textarea',
-          label: `2.4.2 What Are the Steps to Reach This Goal?\nThink about the small actions and habits that will help you reach your goal. What can you do every day or every week that moves you forward? Ask yourself:\n• What exactly do I need to do?\n• How often will I do it? (daily, weekly, etc.)\n• When and where will I do it?\n• How can I make it a regular part of my life?`,
-          description: "📝 Write 3–5 clear, practical steps you’ll take to move toward this goal. Be as specific as possible.",
-          placeholder: "Your steps..."
+          label: t.chapters.chapter4.deepDive.stepsLabel,
+          description: t.chapters.chapter4.deepDive.stepsDesc,
+          placeholder: t.chapters.chapter4.deepDive.stepsPlaceholder
         },
         {
           id: `goal${goalNum}_obstacles`,
           type: 'textarea',
-          label: `2.4.3 What Might Get in the Way — and How Will You Handle It?\nEvery goal has challenges. The key is to think ahead and plan how you’ll deal with them. Ask yourself:\n• What might stop me from reaching this goal? (e.g. distractions, lack of time, fear)\n• Could I be my own biggest obstacle?\n• Will my friends or family support me — or might some make it harder?\n• What could go wrong — and what’s my backup plan?`,
-          description: "📝 Write down the most likely obstacles — and next to each one, a solution or strategy to deal with it.",
-          placeholder: "Obstacles and solutions..."
+          label: t.chapters.chapter4.deepDive.obstaclesLabel,
+          description: t.chapters.chapter4.deepDive.obstaclesDesc,
+          placeholder: t.chapters.chapter4.deepDive.obstaclesPlaceholder
         },
         {
           id: `goal${goalNum}_tracking`,
           type: 'textarea',
-          label: `2.4.4 How Will You Track Your Progress?\nYou need to know if you’re moving forward — so let’s make a plan to check in. Ask yourself:\n• 📅 When do I want to achieve this goal? (Set a clear deadline)\n• 🪜 What signs will show me I’m on track? (e.g. “I’m practicing three times a week” or “My grades have improved”)\n• 🔁 How often will I check my progress? (e.g. weekly, monthly)\n• 🔄 What changes will I see in my life if I’m improving?\n• ⚖️ How will I keep a balance — pushing myself, but not burning out?`,
-          description: "📝 Write a few sentences or bullet points about how and when you’ll check your progress, and what success will look like along the way.",
-          placeholder: "Tracking plan..."
+          label: t.chapters.chapter4.deepDive.trackingLabel,
+          description: t.chapters.chapter4.deepDive.trackingDesc,
+          placeholder: t.chapters.chapter4.deepDive.trackingPlaceholder
         }
       ]
     };
@@ -298,7 +302,7 @@ function App() {
   const [showSummary, setShowSummary] = useState(false);
 
   if (showSummary) {
-    return <SummaryView answers={answers} goalOrder={goalOrder} onBack={() => setShowSummary(false)} />;
+    return <SummaryView answers={answers} goalOrder={goalOrder} language={language} onBack={() => setShowSummary(false)} />;
   }
 
   return (
@@ -316,17 +320,20 @@ function App() {
           className="h-24 md:h-32 mb-8 object-contain"
         />
         <div className="w-full flex justify-between items-end border-t border-black/5 pt-8">
-          <div className="space-y-2">
-            <div className="flex items-center gap-3 text-vision-gold">
-              <span className="uppercase tracking-[0.3em] text-[10px] font-bold">Your Future Plan</span>
+          <div className="space-y-4">
+            <LanguageSelector currentLanguage={language} onLanguageChange={setLanguage} />
+            <div className="space-y-2">
+              <div className="flex items-center gap-3 text-vision-gold">
+                <span className="uppercase tracking-[0.3em] text-[10px] font-bold">{language === 'en' ? 'Your Future Plan' : 'Jou Toekomsplan'}</span>
+              </div>
+              <h1 className="text-3xl md:text-4xl font-serif">
+                {section.chapter || (language === 'en' ? 'Introduction' : 'Inleiding')}
+              </h1>
             </div>
-            <h1 className="text-3xl md:text-4xl font-serif">
-              {section.chapter || 'Introduction'}
-            </h1>
           </div>
           {currentSection > 0 && (
             <div className="text-right">
-              <span className="text-[10px] uppercase tracking-widest opacity-40 font-bold">Progress</span>
+              <span className="text-[10px] uppercase tracking-widest opacity-40 font-bold">{language === 'en' ? 'Progress' : 'Vordering'}</span>
               <div className="text-lg font-serif">{Math.round(progress)}%</div>
             </div>
           )}
@@ -359,10 +366,10 @@ function App() {
               <div className="space-y-8">
                 <div className="bg-white/40 p-8 rounded-lg border border-white/60 backdrop-blur-sm">
                   <p className="text-lg md:text-xl font-light leading-relaxed text-[#1a2b4b]/80 italic">
-                    "This session is not about getting the 'right answers.' It’s about thinking honestly about your life."
+                    "{t.welcome.description1}"
                   </p>
                   <p className="mt-4 text-base font-light opacity-70 leading-relaxed">
-                    Take your time. Be real. This is for you — not for anyone else. If you could shape your future intentionally, what would it look like? The more value you put into your answers, the more valuable your final plan will be. We will send you a PDF of your final plan on completion.
+                    {t.welcome.description2}
                   </p>
                 </div>
                 
@@ -404,8 +411,8 @@ function App() {
                           {index + 1}
                         </div>
                         <div className="flex-1">
-                          <div className="font-bold text-lg">{answers[`goal${goalNum}_title`] || `Goal ${goalNum}`}</div>
-                          <div className="text-sm opacity-50 italic">{answers[`goal${goalNum}_desc`] || 'No description provided'}</div>
+                          <div className="font-bold text-lg">{answers[`goal${goalNum}_title`] || (language === 'en' ? `Goal ${goalNum}` : `Doelwit ${goalNum}`)}</div>
+                          <div className="text-sm opacity-50 italic">{answers[`goal${goalNum}_desc`] || (language === 'en' ? 'No description provided' : 'Geen beskrywing verskaf nie')}</div>
                         </div>
                         <div className="flex flex-col gap-2">
                           <button 
@@ -431,43 +438,43 @@ function App() {
                     <div className="bg-white/60 p-10 rounded-xl border border-[#c5a059]/30 shadow-2xl shadow-[#c5a059]/5 backdrop-blur-md">
                       <div className="flex items-center gap-4 mb-6 text-[#c5a059]">
                         <Sparkles size={32} />
-                        <h2 className="text-3xl font-serif">Plan Complete</h2>
+                        <h2 className="text-3xl font-serif">{t.final.title}</h2>
                       </div>
                       
                       <div className="space-y-6 text-[#1a2b4b]/90 leading-relaxed font-light">
                         <p className="text-xl italic font-normal">
-                          Congratulations for completing the full task!
+                          {t.final.mainText.congrats}
                         </p>
                         <p>
-                          The mere act of capturing this important information about your future already puts you at a significant advantage to achieve these things.
+                          {t.final.mainText.advantage}
                         </p>
                         
                         <div className="bg-[#c5a059]/5 p-8 rounded-lg border-l-4 border-[#c5a059] space-y-4">
                           <p>
-                            People often worry themselves unproductively by constantly revisiting their goals, instead of concentrating on their attainment. It is easy to undermine yourself by always questioning your aims and intentions.
+                            {t.final.mainText.worrySection.text1}
                           </p>
                           <p className="font-medium text-[#c5a059]">
-                            "Am I doing the right thing? Have I chosen the correct goals?"
+                            {t.final.mainText.worrySection.quote}
                           </p>
                           <p>
-                            This leads to chronic worry, unproductive behavior, and lack of opportunity to learn. Now that you have set goals, it is best to concentrate on a daily or weekly basis on implementing the strategies you have devised.
+                            {t.final.mainText.worrySection.text2}
                           </p>
                           <p className="italic underline underline-offset-4 decoration-[#c5a059]/30">
-                            It is just as important to stick to a plan as it is to make a plan.
+                            {t.final.mainText.worrySection.importance}
                           </p>
                         </div>
-
+ 
                         <p>
-                          If you implement your goals, even if they are not perfect, you will learn enough during the implementation phase to make better goals next time. As you continue to repeat the process, you will get wiser and wiser.
+                          {t.final.mainText.learning}
                         </p>
-
+ 
                         <div className="bg-vision-navy/5 p-6 rounded-lg border border-vision-navy/10 text-vision-navy/70">
                           <p className="flex items-center gap-2 font-bold mb-2">
                             <Compass size={18} />
-                            Weekly Review Tip
+                            {t.final.mainText.reviewTip.title}
                           </p>
                           <p>
-                            Set aside some time every week or two — no more than ten or twenty minutes — to mentally review your performance. You will gather all sorts of useful information that you can use to reconsider your plans, down the road.
+                            {t.final.mainText.reviewTip.text}
                           </p>
                         </div>
                       </div>
@@ -489,7 +496,7 @@ function App() {
                         {q.type === 'textarea' ? (
                           <textarea 
                             className="w-full bg-transparent border-b border-black/10 focus:border-vision-gold transition-colors outline-none py-4 text-lg font-light resize-none min-h-[140px] placeholder:opacity-20"
-                            placeholder="Your answer here..."
+                            placeholder={language === 'en' ? "Your answer here..." : "Jou antwoord hier..."}
                             value={answers[q.id] || ''}
                             onChange={(e) => handleInputChange(q.id, e.target.value)}
                           />
@@ -497,7 +504,7 @@ function App() {
                           <input 
                             type="text"
                             className="w-full bg-transparent border-b border-black/10 focus:border-vision-gold transition-colors outline-none py-4 text-lg font-light placeholder:opacity-20"
-                            placeholder="Your answer here..."
+                            placeholder={language === 'en' ? "Your answer here..." : "Jou antwoord hier..."}
                             value={answers[q.id] || ''}
                             onChange={(e) => handleInputChange(q.id, e.target.value)}
                           />
@@ -533,9 +540,9 @@ function App() {
           className="bg-vision-navy text-white px-10 py-4 rounded-full flex items-center gap-3 hover:bg-vision-gold transition-all group overflow-hidden relative shadow-xl shadow-vision-navy/20"
         >
           <span className="relative z-10 transition-colors uppercase tracking-[0.2em] text-[10px] font-bold">
-            {currentSection === 0 ? "Let's Begin" : 
-             (currentSection < ALL_SECTIONS.length - 1 && section.chapter !== ALL_SECTIONS[currentSection + 1]?.chapter) ? `Finish ${section.chapter}` : 
-             (currentSection === ALL_SECTIONS.length - 1 ? 'Create my Future Authoring Plan' : 'Next Step')}
+            {currentSection === 0 ? t.welcome.beginButton : 
+             (currentSection < ALL_SECTIONS.length - 1 && section.chapter !== ALL_SECTIONS[currentSection + 1]?.chapter) ? t.navigation.finish.replace('{chapter}', section.chapter || '') : 
+             (currentSection === ALL_SECTIONS.length - 1 ? t.final.buttons.create : t.navigation.next)}
           </span>
           <ChevronRight size={16} className="relative z-10 group-hover:translate-x-1 transition-transform" />
         </button>
@@ -545,55 +552,57 @@ function App() {
 }
 
 // --- Summary View Component ---
-const SummaryView = ({ answers, goalOrder, onBack }: { answers: Record<string, string>, goalOrder: number[], onBack: () => void }) => {
+const SummaryView = ({ answers, goalOrder, language, onBack }: { answers: Record<string, string>, goalOrder: number[], language: Language, onBack: () => void }) => {
   const print = () => window.print();
+  const t = translations[language].final.summary;
+  const b = translations[language].final.buttons;
 
   return (
     <div className="min-h-screen bg-white text-[#1a2b4b] p-8 md:p-16 max-w-4xl mx-auto font-sans">
       <div className="flex justify-between items-start mb-16 print:hidden">
         <button onClick={onBack} className="flex items-center gap-2 text-sm opacity-50 hover:opacity-100 transition-opacity">
-          <ChevronLeft size={16} /> Back to Edit
+          <ChevronLeft size={16} /> {b.edit}
         </button>
         <button onClick={print} className="bg-vision-gold text-white px-8 py-3 rounded-full flex items-center gap-2 hover:bg-vision-navy transition-all shadow-lg">
-          <Sparkles size={16} /> Save as PDF / Print
+          <Sparkles size={16} /> {b.save}
         </button>
       </div>
 
       <header className="text-center mb-20 border-b-2 border-vision-gold/20 pb-12">
         <img src="/academy_logo.jpg" alt="Logo" className="h-24 mx-auto mb-8" />
-        <h1 className="text-5xl font-serif mb-4">Personal Vision Plan</h1>
+        <h1 className="text-5xl font-serif mb-4">{t.title}</h1>
         <p className="text-xl uppercase tracking-[0.3em] text-vision-gold font-bold">
-          {answers.first_name || 'Student'} {answers.last_name || 'Name'}
+          {answers.first_name || t.subtitle} {answers.last_name || ''}
         </p>
       </header>
 
       <div className="space-y-16">
         {/* Section 1: The Mirror & Horizon */}
         <section>
-          <h2 className="text-2xl font-serif text-vision-gold border-b border-black/5 pb-2 mb-8 uppercase tracking-widest">Part 1: Self-Reflection</h2>
+          <h2 className="text-2xl font-serif text-vision-gold border-b border-black/5 pb-2 mb-8 uppercase tracking-widest">{t.part1}</h2>
           <div className="space-y-10">
-            <SummaryItem label="Primary Improvement Area" value={answers.improve_one} />
-            <SummaryItem label="Development Horizon (6m, 2y, 5y)" value={answers.learn_desc} />
-            <SummaryItem label="Habit Transformation" value={answers.habits_to_change} />
-            <SummaryItem label="Social Environment Vision" value={answers.social_life} />
-            <SummaryItem label="Leisure & Creativity" value={answers.leisure_time} />
-            <SummaryItem label="Family & Core Relationships" value={answers.family_life} />
-            <SummaryItem label="Career & Professional Path" value={answers.career_desc} />
-            <SummaryItem label="Admired Qualities & Mentors" value={answers.mentors_admire} />
+            <SummaryItem label={t.labels.improvement} value={answers.improve_one} language={language} />
+            <SummaryItem label={t.labels.horizon} value={answers.learn_desc} language={language} />
+            <SummaryItem label={t.labels.habit} value={answers.habits_to_change} language={language} />
+            <SummaryItem label={t.labels.social} value={answers.social_life} language={language} />
+            <SummaryItem label={t.labels.leisure} value={answers.leisure_time} language={language} />
+            <SummaryItem label={t.labels.family} value={answers.family_life} language={language} />
+            <SummaryItem label={t.labels.career} value={answers.career_desc} language={language} />
+            <SummaryItem label={t.labels.admired} value={answers.mentors_admire} language={language} />
           </div>
         </section>
 
         {/* Section 2: Future Vision */}
         <section className="page-break-before">
-          <h2 className="text-2xl font-serif text-vision-gold border-b border-black/5 pb-2 mb-8 uppercase tracking-widest">Part 2: Future Vision</h2>
+          <h2 className="text-2xl font-serif text-vision-gold border-b border-black/5 pb-2 mb-8 uppercase tracking-widest">{t.part2}</h2>
           <div className="bg-vision-gold/5 p-8 rounded-xl mb-12 border border-vision-gold/10">
-            <h3 className="text-xl font-bold mb-4">Big Picture Vision: {answers.big_goal_title}</h3>
+            <h3 className="text-xl font-bold mb-4">{t.labels.bigPicture} {answers.big_goal_title}</h3>
             <p className="leading-relaxed opacity-80 italic">"{answers.big_goal_desc}"</p>
           </div>
 
           <div className="space-y-12">
             {goalOrder.map((num, i) => {
-              const title = answers[`goal${num}_title`] || `Goal ${num}`;
+              const title = answers[`goal${num}_title`] || (language === 'en' ? `Goal ${num}` : `Doelwit ${num}`);
               const desc = answers[`goal${num}_desc`];
               return (
                 <div key={num} className="border-l-4 border-vision-gold pl-8 py-4">
@@ -605,19 +614,19 @@ const SummaryView = ({ answers, goalOrder, onBack }: { answers: Record<string, s
                   
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-8 text-sm">
                     <div>
-                      <h4 className="font-bold text-vision-gold uppercase text-[10px] tracking-widest mb-2">Why this matters:</h4>
+                      <h4 className="font-bold text-vision-gold uppercase text-[10px] tracking-widest mb-2">{t.labels.why}</h4>
                       <p className="opacity-80">{answers[`goal${num}_why`]}</p>
                     </div>
                     <div>
-                      <h4 className="font-bold text-vision-gold uppercase text-[10px] tracking-widest mb-2">Strategic Steps:</h4>
+                      <h4 className="font-bold text-vision-gold uppercase text-[10px] tracking-widest mb-2">{t.labels.steps}</h4>
                       <p className="opacity-80 whitespace-pre-wrap">{answers[`goal${num}_steps`]}</p>
                     </div>
                     <div>
-                      <h4 className="font-bold text-vision-gold uppercase text-[10px] tracking-widest mb-2">Obstacles & Solutions:</h4>
+                      <h4 className="font-bold text-vision-gold uppercase text-[10px] tracking-widest mb-2">{t.labels.obstacles}</h4>
                       <p className="opacity-80 whitespace-pre-wrap">{answers[`goal${num}_obstacles`]}</p>
                     </div>
                     <div>
-                      <h4 className="font-bold text-vision-gold uppercase text-[10px] tracking-widest mb-2">Tracking Progress:</h4>
+                      <h4 className="font-bold text-vision-gold uppercase text-[10px] tracking-widest mb-2">{t.labels.tracking}</h4>
                       <p className="opacity-80">{answers[`goal${num}_tracking`]}</p>
                     </div>
                   </div>
@@ -629,16 +638,16 @@ const SummaryView = ({ answers, goalOrder, onBack }: { answers: Record<string, s
       </div>
 
       <footer className="mt-24 pt-12 border-t border-black/5 text-center opacity-40 text-[10px] uppercase tracking-[0.4em]">
-        Vineyard Youth Academy • {new Date().getFullYear()} • Future Authoring Plan
+        {t.footer.replace('{year}', new Date().getFullYear().toString())}
       </footer>
     </div>
   );
 };
 
-const SummaryItem = ({ label, value }: { label: string, value: string }) => (
+const SummaryItem = ({ label, value, language }: { label: string, value: string, language: Language }) => (
   <div className="space-y-2">
     <h3 className="text-[10px] uppercase tracking-[0.2em] font-bold opacity-40">{label}</h3>
-    <p className="text-lg leading-relaxed font-light whitespace-pre-wrap">{value || 'Not provided.'}</p>
+    <p className="text-lg leading-relaxed font-light whitespace-pre-wrap">{value || translations[language].final.summary.notProvided}</p>
   </div>
 );
 
