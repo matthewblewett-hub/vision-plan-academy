@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Personal Vision Plan - Printable Edition</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;700&family=Playfair+Display:ital,wght@0,700;1,700&display=swap');
+
+        :root {
+            --vision-gold: #c5a059;
+            --vision-navy: #1a2b4b;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            color: var(--vision-navy);
+            line-height: 1.6;
+            margin: 0;
+            padding: 0;
+            background: white;
+        }
+
+        .page {
+            width: 210mm;
+            min-height: 297mm;
+            padding: 20mm;
+            margin: 10mm auto;
+            background: white;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+            position: relative;
+            box-sizing: border-box;
+            page-break-after: always;
+        }
+
+        @media print {
+            body { background: none; }
+            .page {
+                margin: 0;
+                box-shadow: none;
+                width: auto;
+                min-height: auto;
+            }
+            .no-print { display: none; }
+        }
+
+        .header {
+            text-align: center;
+            border-bottom: 2px solid var(--vision-gold);
+            padding-bottom: 20px;
+            margin-bottom: 40px;
+        }
+
+        .logo {
+            height: 60px;
+            margin-bottom: 10px;
+        }
+
+        h1 {
+            font-family: 'Playfair Display', serif;
+            font-size: 28pt;
+            margin: 0;
+            color: var(--vision-navy);
+        }
+
+        h2 {
+            font-family: 'Playfair Display', serif;
+            font-size: 18pt;
+            color: var(--vision-gold);
+            border-bottom: 1px solid #eee;
+            padding-bottom: 5px;
+            margin-top: 30px;
+        }
+
+        .instruction-box {
+            background: #fdfaf4;
+            border-left: 4px solid var(--vision-gold);
+            padding: 15px;
+            font-style: italic;
+            font-size: 10pt;
+            margin-bottom: 15px;
+            color: #555;
+        }
+
+        .input-line {
+            border-bottom: 1px solid #ccc;
+            height: 30px;
+            margin-bottom: 10px;
+        }
+
+        .input-area {
+            border: 1px solid #eee;
+            min-height: 80px;
+            margin-bottom: 20px;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: 1fr 2fr;
+            gap: 20px;
+            margin-bottom: 15px;
+        }
+
+        .footer {
+            position: absolute;
+            bottom: 20mm;
+            left: 20mm;
+            right: 20mm;
+            text-align: center;
+            font-size: 8pt;
+            color: #aaa;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        .student-info {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 40px;
+            margin-bottom: 40px;
+        }
+
+        .reflection-prompt {
+            font-weight: bold;
+            font-size: 11pt;
+            margin-top: 20px;
+            display: block;
+        }
+
+        .goal-row {
+            display: grid;
+            grid-template-columns: 30px 1fr 2fr;
+            gap: 10px;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        .checkbox {
+            width: 20px;
+            height: 20px;
+            border: 1px solid var(--vision-gold);
+            display: inline-block;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="no-print" style="text-align:center; padding: 20px; background: #eee;">
+        <button onclick="window.print()" style="background: #c5a059; color: white; border: none; padding: 10px 20px; border-radius: 5px; cursor: pointer; font-weight: bold;">
+            🖨️ PRINT PLAN (Save as PDF)
+        </button>
+        <p style="font-size: 0.8em; margin-top: 10px;">For the best result, ensure "Background Graphics" is enabled in your print settings.</p>
+    </div>
+
+    <!-- PAGE 1 -->
+    <div class="page">
+        <div class="header">
+            <img src="/academy_logo.jpg" class="logo" alt="Logo">
+            <h1>Personal Vision Plan</h1>
+            <p style="letter-spacing: 4px; color: var(--vision-gold); font-weight: bold; font-size: 10pt;">PRINTABLE EDITION</p>
+        </div>
+
+        <div class="student-info">
+            <div>
+                <label class="reflection-prompt">STUDENT NAME:</label>
+                <div class="input-line"></div>
+            </div>
+            <div>
+                <label class="reflection-prompt">DATE:</label>
+                <div class="input-line"></div>
+            </div>
+        </div>
+
+        <h2>Section 1: The Mirror & The Horizon</h2>
+        
+        <div class="instruction-box">
+            Take a moment to look at your life right now. If you could improve one single thing—whether it’s a habit, a relationship, your progress at school, or your health—what would it be? Why is this the most important thing for you to focus on first?
+        </div>
+        <label class="reflection-prompt">Primary Improvement Area & Why:</label>
+        <div class="input-area" style="min-height: 120px;"></div>
+
+        <div class="instruction-box" style="margin-top: 30px;">
+            Think about who you want to become over the next few years. Where do you see yourself growing? What kind of person do you want to be known as?
+        </div>
+        <label class="reflection-prompt">6 Months Horizon:</label>
+        <div class="input-line"></div>
+        <label class="reflection-prompt">2 Years Horizon:</label>
+        <div class="input-line"></div>
+        <label class="reflection-prompt">5 Years Horizon:</label>
+        <div class="input-line"></div>
+
+        <div class="footer">Vineyard Youth Academy • Part 1 of 5</div>
+    </div>
+
+    <!-- PAGE 2 -->
+    <div class="page">
+        <h2>Section 2: Habits & Social Environment</h2>
+        
+        <div class="instruction-box">
+            Are there any habits you'd like to build or stop—and why? Think about school (procrastination, focus), friends & family (communication), health (sleep, exercise), or temptations.
+        </div>
+        <label class="reflection-prompt">Habit Transformation:</label>
+        <div class="input-area" style="min-height: 150px;"></div>
+
+        <div class="instruction-box" style="margin-top: 30px;">
+            What does your ideal social life look like? Think about the friends you want to have and the environment you want to be in.
+        </div>
+        <label class="reflection-prompt">Social Vision:</label>
+        <div class="input-area" style="min-height: 150px;"></div>
+
+        <div class="instruction-box" style="margin-top: 30px;">
+            Think about someone you look up to. What qualities do they have that you admire? How can you start to build those same qualities in your own life?
+        </div>
+        <label class="reflection-prompt">Admired Qualities & Mentors:</label>
+        <div class="input-area" style="min-height: 150px;"></div>
+
+        <div class="footer">Vineyard Youth Academy • Part 2 of 5</div>
+    </div>
+
+    <!-- PAGE 3 -->
+    <div class="page">
+        <h2>Section 3: Future Vision - The Big Picture</h2>
+
+        <div class="instruction-box">
+            If you could achieve one "Big Goal" that would change everything, what would it be? This is the headline for your future.
+        </div>
+        <label class="reflection-prompt">BIG GOAL TITLE:</label>
+        <div class="input-line"></div>
+        <label class="reflection-prompt">BIG GOAL DESCRIPTION:</label>
+        <div class="input-area"></div>
+
+        <h2 style="margin-top: 40px;">Break Into 6 Specific Goals</h2>
+        <div class="instruction-box">
+            Think of 6 important goals (School, Career, Health, Friends, Personal Growth). Give each a title and one short sentence.
+        </div>
+
+        <div class="goal-row"><span style="font-weight:bold">01.</span> <div class="input-line" style="margin:0"></div> <div class="input-line" style="margin:0"></div></div>
+        <div class="goal-row"><span style="font-weight:bold">02.</span> <div class="input-line" style="margin:0"></div> <div class="input-line" style="margin:0"></div></div>
+        <div class="goal-row"><span style="font-weight:bold">03.</span> <div class="input-line" style="margin:0"></div> <div class="input-line" style="margin:0"></div></div>
+        <div class="goal-row"><span style="font-weight:bold">04.</span> <div class="input-line" style="margin:0"></div> <div class="input-line" style="margin:0"></div></div>
+        <div class="goal-row"><span style="font-weight:bold">05.</span> <div class="input-line" style="margin:0"></div> <div class="input-line" style="margin:0"></div></div>
+        <div class="goal-row"><span style="font-weight:bold">06.</span> <div class="input-line" style="margin:0"></div> <div class="input-line" style="margin:0"></div></div>
+
+        <div class="footer" style="bottom: 10mm;">Vineyard Youth Academy • Part 3 of 5</div>
+    </div>
+
+    <!-- PAGE 4 -->
+    <div class="page">
+        <h2>Section 4: Goal Deep-Dive (Strategy)</h2>
+        
+        <div style="border: 2px solid var(--vision-gold); padding: 20px; margin-bottom: 30px;">
+            <label class="reflection-prompt">STRATEGIC GOAL 01: ____________________________________</label>
+            <p style="font-size: 9pt; margin-bottom: 5px;">Steps to achieve (What exactly? How often?):</p>
+            <div class="input-line"></div>
+            <div class="input-line"></div>
+            <p style="font-size: 9pt; margin-bottom: 5px;">Potential Obstacles & Tracking progress:</p>
+            <div class="input-area"></div>
+        </div>
+
+        <div style="border: 2px solid #eee; padding: 20px; margin-bottom: 30px;">
+            <label class="reflection-prompt">STRATEGIC GOAL 02: ____________________________________</label>
+            <p style="font-size: 9pt; margin-bottom: 5px;">Steps to achieve:</p>
+            <div class="input-line"></div>
+            <div class="input-line"></div>
+            <p style="font-size: 9pt; margin-bottom: 5px;">Potential Obstacles & Tracking:</p>
+            <div class="input-area"></div>
+        </div>
+
+        <div style="border: 2px solid #eee; padding: 20px;">
+            <label class="reflection-prompt">STRATEGIC GOAL 03: ____________________________________</label>
+            <p style="font-size: 9pt; margin-bottom: 5px;">Steps to achieve:</p>
+            <div class="input-line"></div>
+            <div class="input-line"></div>
+            <p style="font-size: 9pt; margin-bottom: 5px;">Potential Obstacles & Tracking:</p>
+            <div class="input-area"></div>
+        </div>
+
+        <div class="footer">Vineyard Youth Academy • Part 4 of 5</div>
+    </div>
+
+    <!-- PAGE 5 -->
+    <div class="page">
+        <h2>Section 5: Final Goals & Future Steps</h2>
+
+        <div style="border: 2px solid #eee; padding: 20px; margin-bottom: 30px;">
+            <label class="reflection-prompt">STRATEGIC GOAL 04: ____________________________________</label>
+            <div class="input-line"></div>
+            <div class="input-line"></div>
+        </div>
+
+        <div style="border: 2px solid #eee; padding: 20px; margin-bottom: 30px;">
+            <label class="reflection-prompt">STRATEGIC GOAL 05: ____________________________________</label>
+            <div class="input-line"></div>
+            <div class="input-line"></div>
+        </div>
+
+        <div style="border: 2px solid #eee; padding: 20px; margin-bottom: 30px;">
+            <label class="reflection-prompt">STRATEGIC GOAL 06: ____________________________________</label>
+            <div class="input-line"></div>
+            <div class="input-line"></div>
+        </div>
+
+        <div style="background: var(--vision-navy); color: white; padding: 30px; border-radius: 10px; margin-top: 40px;">
+            <h3 style="margin-top: 0; font-family: 'Playfair Display', serif;">Congratulations!</h3>
+            <p style="font-size: 10pt; line-height: 1.4;">
+                The mere act of capturing this important information about your future already puts you at an advantage. 
+                <strong>Stick to the plan:</strong> Even if it's not perfect, you will learn and get wiser during the implementation phase.
+            </p>
+            <div style="border-top: 1px solid rgba(255,255,255,0.2); padding-top: 15px; margin-top: 15px;">
+                <label>SIGNATURE:</label>
+                <div style="border-bottom: 1px solid white; height: 30px;"></div>
+            </div>
+        </div>
+
+        <div class="footer">Vineyard Youth Academy • Part 5 of 5</div>
+    </div>
+
+</body>
+</html>

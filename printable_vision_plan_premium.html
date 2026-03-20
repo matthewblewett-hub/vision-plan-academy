@@ -1,0 +1,323 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Personal Vision Plan - Printable Edition</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:ital,wght@0,300;0,400;0,700;1,300;1,400&family=Playfair+Display:ital,wght@0,700;1,700&display=swap');
+
+        :root {
+            --vision-gold: #c5a059;
+            --vision-navy: #1a2b4b;
+        }
+
+        * { box-sizing: border-box; }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            color: var(--vision-navy);
+            line-height: 1.5;
+            margin: 0;
+            padding: 0;
+            background: #f8f4f0; /* Match app background for screen view */
+        }
+
+        .page {
+            width: 210mm;
+            min-height: 297mm;
+            padding: 2.5cm;
+            margin: 20px auto;
+            background: white;
+            box-shadow: 0 4px 50px rgba(0,0,0,0.1);
+            position: relative;
+            page-break-after: always;
+            overflow: hidden;
+        }
+
+        @media print {
+            body { background: white; }
+            .page {
+                margin: 0;
+                box-shadow: none;
+                width: 210mm;
+            }
+            .no-print { display: none; }
+        }
+
+        .header {
+            text-align: center;
+            border-bottom: 2px solid rgba(197, 160, 89, 0.2);
+            padding-bottom: 25px;
+            margin-bottom: 35px;
+        }
+
+        .logo {
+            height: 70px;
+            margin-bottom: 20px;
+        }
+
+        h1 {
+            font-family: 'Playfair Display', serif;
+            font-size: 32pt;
+            margin: 0;
+            letter-spacing: -0.5px;
+            color: var(--vision-navy);
+        }
+
+        .subtitle {
+            text-transform: uppercase;
+            letter-spacing: 0.3em;
+            color: var(--vision-gold);
+            font-weight: 700;
+            font-size: 10pt;
+            margin-top: 10px;
+        }
+
+        h2 {
+            font-family: 'Playfair Display', serif;
+            font-size: 20pt;
+            color: var(--vision-gold);
+            margin-top: 30px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            border-bottom: 1px solid rgba(0,0,0,0.05);
+            padding-bottom: 8px;
+        }
+
+        .label {
+            text-transform: uppercase;
+            letter-spacing: 0.2em;
+            font-size: 8pt;
+            font-weight: 700;
+            color: rgba(26, 43, 75, 0.4);
+            display: block;
+            margin-top: 25px;
+            margin-bottom: 8px;
+        }
+
+        .prompt-box {
+            background: rgba(197, 160, 89, 0.05);
+            border-left: 3px solid var(--vision-gold);
+            padding: 20px;
+            font-size: 10.5pt;
+            color: rgba(26, 43, 75, 0.8);
+            margin: 15px 0;
+            line-height: 1.6;
+        }
+
+        .writing-line {
+            border-bottom: 1px solid rgba(26, 43, 75, 0.1);
+            height: 35px;
+            width: 100%;
+        }
+
+        .writing-area {
+            min-height: 100px;
+            width: 100%;
+            background-image: repeating-linear-gradient(white, white 34px, rgba(26, 43, 75, 0.05) 35px);
+            margin-top: 10px;
+        }
+
+        .footer-tag {
+            position: absolute;
+            bottom: 1.5cm;
+            left: 2.5cm;
+            right: 2.5cm;
+            text-align: center;
+            font-size: 8pt;
+            text-transform: uppercase;
+            letter-spacing: 4px;
+            opacity: 0.3;
+        }
+
+        .button {
+            display: inline-block;
+            background: var(--vision-navy);
+            color: white;
+            padding: 15px 30px;
+            text-decoration: none;
+            border-radius: 50px;
+            font-size: 10pt;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            cursor: pointer;
+            border: none;
+        }
+
+        .goal-grid {
+            margin-top: 20px;
+            display: grid;
+            grid-template-columns: 40px 1fr 1fr;
+            gap: 15px;
+        }
+
+        .goal-number {
+            font-family: 'Playfair Display', serif;
+            font-size: 24pt;
+            opacity: 0.15;
+        }
+
+        .deep-dive-box {
+            margin-top: 30px;
+            padding: 25px;
+            background: rgba(26, 43, 75, 0.02);
+            border: 1px solid rgba(26, 43, 75, 0.05);
+            border-radius: 8px;
+        }
+
+        .quote-box {
+            margin-top: 40px;
+            padding: 30px;
+            border: 1px solid rgba(197, 160, 89, 0.2);
+            background: white;
+            box-shadow: 0 10px 40px rgba(197, 160, 89, 0.1);
+            border-radius: 12px;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="no-print" style="text-align:center; padding: 30px;">
+        <button class="button" onclick="window.print()">🖨️ PRINT PERSONAL VISION PLAN</button>
+        <p style="font-size: 9pt; margin-top: 15px; opacity: 0.6;">Tip: In print settings, enable <b>'Background Graphics'</b> for the full premium look.</p>
+    </div>
+
+    <!-- PAGE 1: THE MIRROR & HORIZON -->
+    <div class="page">
+        <div class="header">
+            <img src="/academy_logo.jpg" class="logo" alt="Logo">
+            <h1>Personal Vision Plan</h1>
+            <div class="subtitle">Vineyard Youth Academy • Student Edition</div>
+        </div>
+
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 40px;">
+            <div><span class="label">STUDENT NAME</span><div class="writing-line"></div></div>
+            <div><span class="label">DATE</span><div class="writing-line"></div></div>
+        </div>
+
+        <h2>01. The Mirror & The Horizon</h2>
+        
+        <div class="prompt-box">
+            Take a moment to look at your life right now. If you could improve one single thing—whether it’s a habit, a relationship, your progress at school, or your health—what would it be? Why is this the most important thing for you to focus on first?
+        </div>
+        <span class="label">Primary area for improvement & why:</span>
+        <div class="writing-area" style="min-height: 140px;"></div>
+
+        <div class="prompt-box" style="margin-top: 35px;">
+            Think about who you want to become over the next few years. Where do you see yourself growing? What kind of person do you want to be known as?
+        </div>
+        <div style="display: grid; grid-template-columns: 100px 1fr; gap: 15px; align-items: end;">
+            <span class="label">6 Months</span><div class="writing-line"></div>
+            <span class="label">2 Years</span><div class="writing-line"></div>
+            <span class="label">5 Years</span><div class="writing-line"></div>
+        </div>
+
+        <div class="footer-tag">Step 1 of 5 • Reflection</div>
+    </div>
+
+    <!-- PAGE 2: HABITS & MENTORS -->
+    <div class="page">
+        <h2>02. Habit Transformation</h2>
+        
+        <div class="prompt-box">
+            Are there any habits you’d like to build or stop—and why? Think about 📘 School, 👥 Friends, 🧠 Health, or 🚫 Temptations.
+        </div>
+        <span class="label">Your Habits & Reasoning:</span>
+        <div class="writing-area" style="min-height: 180px;"></div>
+
+        <h2 style="margin-top: 50px;">03. Social Vision & Mentors</h2>
+        <div class="prompt-box">
+            What does your ideal social life look like? And who do you admire? What qualities do they have that you can build in your own life?
+        </div>
+        
+        <span class="label">Social Life & Environment:</span>
+        <div class="writing-area" style="min-height: 150px;"></div>
+
+        <span class="label">Admired Qualities & Mentors:</span>
+        <div class="writing-area" style="min-height: 150px;"></div>
+
+        <div class="footer-tag">Step 2 of 5 • Social & Environment</div>
+    </div>
+
+    <!-- PAGE 3: FUTURE VISION -->
+    <div class="page">
+        <h2>04. The Future Vision</h2>
+
+        <div class="prompt-box">
+            If you could achieve one "Big Goal" that would change everything, what would it be? This is the headline for your future.
+        </div>
+        <span class="label">Big Picture Title:</span>
+        <div class="writing-line"></div>
+        <span class="label">Big Picture Vision Description:</span>
+        <div class="writing-area" style="min-height: 100px;"></div>
+
+        <h2 style="margin-top: 40px;">05. Break Into 6 Specific Goals</h2>
+        <div class="prompt-box">
+            Think of 6 important goals (School, Career, Health, Friends, personal growth). Give each a title and one short sentence.
+        </div>
+
+        <div class="goal-grid"><span class="goal-number">01</span><div class="writing-line"></div><div class="writing-line"></div></div>
+        <div class="goal-grid"><span class="goal-number">02</span><div class="writing-line"></div><div class="writing-line"></div></div>
+        <div class="goal-grid"><span class="goal-number">03</span><div class="writing-line"></div><div class="writing-line"></div></div>
+        <div class="goal-grid"><span class="goal-number">04</span><div class="writing-line"></div><div class="writing-line"></div></div>
+        <div class="goal-grid"><span class="goal-number">05</span><div class="writing-line"></div><div class="writing-line"></div></div>
+        <div class="goal-grid"><span class="goal-number">06</span><div class="writing-line"></div><div class="writing-line"></div></div>
+
+        <div class="prompt-box" style="margin-top: 30px; font-size: 9pt;">
+            <b>PRIORITY RANKING:</b> Put a number (1-6) next to each goal title above to indicate its importance.
+        </div>
+
+        <div class="footer-tag">Step 3 of 5 • High-Level Goals</div>
+    </div>
+
+    <!-- PAGE 4: STRATEGIC DEEP-DIVE -->
+    <div class="page">
+        <h2>06. Strategic Deep-Dive (Part A)</h2>
+        
+        <div class="deep-dive-box">
+            <span class="label">PRIORITY GOAL #1 TITLE: _________________________________________</span>
+            <div class="prompt-box">Think about why this goal matters, the small steps/habits to reach it, what might stop you, and how you will track progress.</div>
+            <span class="label">Reasoning & My Strategy:</span>
+            <div class="writing-area" style="min-height: 180px;"></div>
+            <span class="label">Obstacles & Tracking Progress:</span>
+            <div class="writing-area" style="min-height: 150px;"></div>
+        </div>
+
+        <div class="footer-tag">Step 4 of 5 • Strategic Detail</div>
+    </div>
+
+    <!-- PAGE 5: FINAL STEPS -->
+    <div class="page">
+        <h2>06. Strategic Deep-Dive (Part B)</h2>
+
+        <div class="deep-dive-box">
+            <span class="label">PRIORITY GOAL #2 TITLE: _________________________________________</span>
+            <div class="writing-area" style="min-height: 180px;"></div>
+        </div>
+
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+            <div class="deep-dive-box"><span class="label">GOAL #3 STRATEGY:</span><div class="writing-area"></div></div>
+            <div class="deep-dive-box"><span class="label">GOAL #4 STRATEGY:</span><div class="writing-area"></div></div>
+        </div>
+
+        <div class="quote-box">
+            <h3 style="font-family: 'Playfair Display', serif; color: var(--vision-navy); margin-top: 0;">Congratulations for completing the full task!</h3>
+            <p style="font-style: italic; color: var(--vision-gold); margin-bottom: 20px;">
+                "The mere act of capturing this important information about your future already puts you at an advantage."
+            </p>
+            <p style="font-size: 9pt; opacity: 0.7;">
+                <b>STICK TO THE PLAN:</b> It is just as important to stick to a plan as it is to make a plan. Even if your goals aren't perfect, you will learn during implementation. 
+            </p>
+            <div style="margin-top: 30px; border-top: 1px solid #eee; padding-top: 15px;">
+                <span class="label" style="display: inline-block; margin: 0;">SIGNATURE</span>
+                <div class="writing-line" style="width: 250px; display: inline-block; margin-left: 15px;"></div>
+            </div>
+        </div>
+
+        <div class="footer-tag">Step 5 of 5 • Complete</div>
+    </div>
+
+</body>
+</html>
